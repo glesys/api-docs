@@ -1,6 +1,6 @@
 #CreateDestroyList - GleSYS API Ruby example
 
-Author: Anton Lindström
+Author: [Anton Lindström](/antonlindstrom)
 
 This example contains methods to create, destroy and list servers in the Glesys Cloud.
 
