@@ -48,7 +48,7 @@
                     status();
                 elseif($_GET["cmd"] == "memchange"or $_GET["cmd"] == "changemem")
                     memchange();
-                elseif($_GET["cmd"] == "console"or $_GET["cmd"] == "remote")
+                elseif($_GET["cmd"] == "console")
                     console();
                 else
                     echo"Unknown command.";
@@ -67,7 +67,6 @@
             <input type="submit" name="cmd" value="details"/>
             <input type="submit" name="cmd" value="status"/><br/>
             <input type="submit" name="cmd" value="memchange"/>
-            <input type="submit" name="cmd" value="remote"/>
             <input type="submit" name="cmd" value="console"/>
         </form>
 <?php
@@ -129,17 +128,17 @@
             echo "<table>";
             foreach($details["server"] as $key => $values)
             {
-                if($key == "disk" or $key == "transfer")
+                if($key == "disksize" or $key == "transfer")
                     $values .= " GB";
-                if($key == "memory")
+                if($key == "memorysize")
                     $values .= " MB";
                 if($key == "cost")
-                    echo "<tr><td>cost</td><td>".$values["amount"].$values["currency"]."/".$values["timeperiod"]."</td></tr>";
+                    echo "<tr><td>cost</td><td>".$values["amount"]." ".$values["currency"]."/".$values["timeperiod"]."</td></tr>";
                 elseif($key == "iplist")
                 {
                     echo "<tr><td>iplist</td><td>";
                     foreach($values as $newVal)
-                        echo"(IPv".$newVal["version"].") ".$newVal["ip"]."<br/>";
+                        echo"(IPv".$newVal["version"].") ".$newVal["ipaddress"]."<br/>";
                     echo "</td></tr>";
                 }
                 else
@@ -162,24 +161,19 @@
             foreach($status["server"] as $key => $values)
             {
                 if($key == "cpu")
-                    echo "<tr><td>cpu usage</td><td>".($values["system"]+$values["user"]+$values["nice"])."%</td></tr>";
+                    echo "<tr><td>cpu usage</td><td>". $values["usage"] . " ". $values["unit"] ."</td></tr>";
                 elseif($key == "memory")
-                    echo "<tr><td>memory-</td><td>usage: ".$values["memusage"]." MB<br/>size: ".$values["memsize"]." MB</td>";
+                    echo "<tr><td>memory-</td><td>usage: ".$values["usage"]." MB<br/>size: ".$values["max"]." MB</td>";
                 elseif($key == "disk")
-                    echo "<tr><td>harddrive</td><td>free: ".($values["disksize"]-$values["diskused"])." ".$values["unit"]."</td></tr>";
-                elseif($key == "bandwidth")
-                    echo "<tr><td>bandwidth</td><td>today: ".$values["today"]." GB<br/>last month/maxwidth: ".$values["last30days"]."/".$values["max"]."</td></tr>";
+                    echo "<tr><td>harddrive</td><td>free: ".($values["max"]-$values["usage"])." ".$values["unit"]."</td></tr>";
+                elseif($key == "transfer")
+                    echo "<tr><td>transfer</td><td>last month/max: ".$values["usage"]."/".$values["max"]." ".$values["unit"]."</td></tr>";
                 elseif($key == "uptime")
                 {
-                    echo"<tr><td>uptime:</td><td>";
-                    $values = explode(" ", $values);
-                    $interval = array("years","months","weeks","days","hours","minutes","seconds");
-                    for($i = 0; $i < 7; $i++)
-                        echo $values[$i]." ".$interval[$i].",";
-                    echo"</td></tr>";
+                    echo "<tr><td>uptime:</td><td>";
+                    echo $values["current"]. " " . $values["unit"];
+                    echo "</td></tr>";
                 }
-                else
-                    echo "<tr><td>".$key."</td><td>".$values."</td></tr>";
             }
         }
 	//Automaticall upgrade or downgrade the memory of the server based on how much memory the server is currently using.
@@ -196,7 +190,7 @@
                 return;
             }
             $allowed_options = array(128, 256, 512, 768, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 5120, 6144, 7168, 8192, 9216, 10240, 11264, 12288);
-            $size = $freemem["server"]["memory"]["memsize"];
+            $size = $freemem["server"]["memory"]["max"];
             if(isset($_GET["usedmem"]))
                 if(is_numeric($_GET["usedmem"]))
                     $freemem = $size - $_GET["usedmem"];
@@ -206,8 +200,8 @@
                     die;
                 }
             else
-                if(is_numeric($freemem["server"]["memory"]["memusage"]))
-                    $freemem = $size-$freemem["server"]["memory"]["memusage"];
+                if(is_numeric($freemem["server"]["memory"]["usage"]))
+                    $freemem = $size-$freemem["server"]["memory"]["usage"];
                 else
                 {
                     echo"Needs the \"usedmem\" argument.";
@@ -221,13 +215,13 @@
 
             if($freemem > $size*(1-($config["changevals"]["lower"]/100)) and $i > 0)
             {
-                $client->post("server/edit", array("serverid" => $config["serverid"], "memorysize" => $available[$i-1]));
-                echo"Memory degraded to ".$available[$i-1]." MB since less than ".$config["changevals"]["lower"]." percent of the memory was used.";
+                $client->post("server/edit", array("serverid" => $config["serverid"], "memorysize" => $allowed_options[$i-1]));
+                echo"Memory degraded to ".$allowed_options[$i-1]." MB since less than ".$config["changevals"]["lower"]." percent of the memory was used.";
             }
             elseif($freemem < $size*(1-($config["changevals"]["higher"]/100)) and $i < 18)
             {
-                $client->post("server/edit", array("serverid" => $config["serverid"], "memorysize" => $available[$i+1]));
-                echo"Memory upgraded to ".$available[$i+1]." MB since more than ".$config["changevals"]["higher"]." percent of the memory was used.";
+                $client->post("server/edit", array("serverid" => $config["serverid"], "memorysize" => $allowed_options[$i+1]));
+                echo"Memory upgraded to ".$allowed_options[$i+1]." MB since more than ".$config["changevals"]["higher"]." percent of the memory was used.";
             }
             else
                 echo "Memory seems to \"fit\"";
@@ -248,3 +242,4 @@
         ?>
     </body>
 </html>
+
