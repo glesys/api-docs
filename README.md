@@ -29,11 +29,12 @@ Remember that all these examples are just examples. If you want to use any of th
 [All Ruby examples](https://github.com/GleSYS/API/tree/master/Ruby)
 * [CreateDestroyList](https://github.com/GleSYS/API/tree/master/Ruby/CreateDestroyList) - Create, Destroy and List servers.
 
-#Are there any frameworks available?
+#Are there any frameworks/toolboxes available?
 If you are looking for a framework to manage your GleSYS virtual servers take a look at the following projects:
 
 * [fog](http://fog.io) - The Ruby cloud services library.
 * [jclouds](http://www.jclouds.org/) - API abstractions as java and clojure libraries.
+* [knife-glesys](https://github.com/smgt/knife-glesys) - A Knife addon for managing you GleSYS vps. Uses fog.
 
 If you know about any other frameworks that support the GleSYS API, please let us know!
 
