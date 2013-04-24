@@ -18,14 +18,14 @@ if [ $PERCENTAGE -gt 90 ]; then
 	fi		
         NEWMEM=$((TOTAL+ADDMEM));
 		/usr/bin/curl -X POST -d serverid=vz1234567\&memorysize=$NEWMEM -k --basic -u cl12345:[api-key] https://api.glesys.com/server/edit/
-        (
+        
 			if [ $ADDMEM -eq 0 ]; then 
 				echo -e "No more memory could be added.\n"
 			else
-				echo -e "Increasing memory to $NEWMEM MB.\n"
+				( echo -e "Increasing memory to $NEWMEM MB.\n"
+				free -m) | mail -s "Server $HOSTNAME is low on memory: $PERCENTAGE% used - RAM report" user@mail.com
 			fi
-			free -m
-         ) | mail -s "Server $HOSTNAME is low on memory: $PERCENTAGE% used - RAM report" user@mail.com
+         
 fi
 
 if  [ $TOTAL -ge 14336 ]; then
@@ -43,12 +43,11 @@ fi
 if [ $FREE -gt $((REMMEM+50)) ]; then
         NEWMEM=$((TOTAL-REMMEM));
 		/usr/bin/curl -X POST -d serverid=vz1234567\&memorysize=$NEWMEM -k --basic -u cl12345:[api-key] https://api.glesys.com/server/edit/
-        (
-			if [ $REMMEM -eq 0 ]; then
+        	if [ $REMMEM -eq 0 ]; then
 				echo -e "No more memory could be removed.\n"
 			else
-				echo -e "Decreasing memory to $NEWMEM MB.\n"
+			(	echo -e "Decreasing memory to $NEWMEM MB.\n"
+				         free -m
+			) | mail -s "Server $HOSTNAME has too much memory: $PERCENTAGE% used - RAM report" user@mail.com
 			fi
-         free -m
-         ) | mail -s "Server $HOSTNAME has too much memory: $PERCENTAGE% used - RAM report" user@mail.com
 fi
