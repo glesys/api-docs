@@ -27,29 +27,31 @@ try:
 except:
 	print "No connection"
 	exit
-	
+
+# Bugfix for conky exec, python does not know which encoding to use and 
+# will wrongly default to ascii
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)	
 
 
+def printMetric(metricNode, metricName):
+	usage = float(metricNode.find("usage").text)
+	max = float(metricNode.find("max").text)
+	print metricName+": $alignr", usage, " / ", max, metricNode.find("unit").text[0:2]	
+	print "${execbar echo \""+ str(usage * 100 / max) + "\"}"
 
-#print resp
-#print content
-#print json.dumps(data)
 tree = ET.fromstring(content)
-
 for server in tree.findall("server"):
-	print "State:", server.find("state").text
-	cpu = server.find("cpu")
-	print "CPUs:", cpu.find("usage").text + " / " + cpu.find("max").text, cpu.find("unit").text
-	memory = server.find("memory")
-	print "Memory:", memory.find("usage").text + " / " + memory.find("max").text, memory.find("unit").text
-	transfer = server.find("transfer")
-	print "Transfer:", transfer.find("usage").text + " / " + transfer.find("max").text, transfer.find("unit").text
-	
+	print "Server name: $alignr", __APISERVER__
+	print "State: $alignr", server.find("state").text
 	uptime = int(server.find("uptime").find("current").text)
 	d = datetime.timedelta(seconds=uptime)
-	print "Uptime:", d
+	print "Uptime: $alignr", d
+	print
 	
+	cpu = server.find("cpu")	
+	print "CPUs: $alignr", cpu.find("usage").text + " / " + cpu.find("max").text, cpu.find("unit").text	
+	memory = server.find("memory")	
+	printMetric(memory, "Memory")	
+	transfer = server.find("transfer")	
+	printMetric(transfer, "Transfer")	
 	
-
-#print "Bandwidth:", "${execbar
