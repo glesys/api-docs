@@ -29,6 +29,10 @@ Remember that all these examples are just examples. If you want to use any of th
 [All Ruby examples](https://github.com/GleSYS/API/tree/master/Ruby)
 * [CreateDestroyList](https://github.com/GleSYS/API/tree/master/Ruby/CreateDestroyList) - Create, Destroy and List servers.
 
+##Python
+[All Python examples](https://github.com/GleSYS/API/tree/master/Python)
+* [ConkyServerStatus](https://github.com/GleSYS/API/tree/master/Python/ConkyServerStatus) - Commandline script to be used with [conky](http://conky.sourceforge.net/) to show a specific glesys servers status directly on your desktop
+
 #Are there any frameworks/toolboxes available?
 If you are looking for a framework to manage your GleSYS virtual servers take a look at the following projects:
 
