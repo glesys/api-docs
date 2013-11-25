@@ -1,0 +1,79 @@
+/**
+ * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
+ * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
+ */
+
+All functions return true on success and false on failure,
+On failure $glesys_api->fetch_response() returns
+array(
+	'code'	=> (int)	response code
+	'text'	=> (string)	response text
+	'debug'	=> array(
+		'input'	=> array(
+			The POST data sent to the API
+		)
+	)
+);
+
+On success you need to call $glesys_api->fetch_response() to get a array with the returned data.
+
+Function $glesys_api->email_overview()
+Description: Returns a overview of all domains and count of emailaccounts and alias.
+Param: none
+
+Function $glesys_api->email_globalquota(global quota)
+Description: Enables the user to set and get the global quota. The global quota is the total amount of space that is allowed to be allocated to email accounts. The globalquota argument should be in MB.
+Param: optional int new global quota to set in MB. Min is 10240 and it must be divisible by 1024.
+
+Function $glesys_api->email_list($domainname, $filter = '')
+Description: Gets a list of all accounts and aliases of a domain with full details. It is also possible to filter the results by setting the optional filter parameter to an existing alias or account.
+Param: required domain name
+Param: optional filter Example: user@example.com. Must be a valid email address.
+
+Function $glesys_api->email_editaccount($emailaccount, $data = array())
+Description: Edit an email account and change things like quota, password, autoresponse and antispam level. Allowed values for antispam is 0-5. Quota is in MB.
+Param string $emailaccount required.
+Param array $args, all array parts are optional array(
+  'antispamlevel'	=> 0 - 5
+  'antivirus'		=> 0|1
+  'password'		=> new password
+  'autorespond'		=> 0|1
+  'autorespondsaveemail'	=> 0|1
+  'autorespondmessage'		=> string with message
+  'quota'			=> new quota in MB
+)
+
+Function $glesys_api->email_delete($email)
+Description: Delete an email-account or alias.
+Param string $email required.
+
+Function $glesys_api->email_createaccount($emailaccount, $password, $data = array())
+Description: Create an email account. Allowed values for antispam is 0-5.
+Param string $emailaccount required.
+Param string $password required.
+Param array $args, all array parts are optional array(
+  'antispamlevel'	=> 0 - 5
+  'antivirus'		=> 0|1
+  'autorespond'		=> 0|1
+  'autorespondsaveemail'	=> 0|1
+  'autorespondmessage'		=> string with message
+  'quota'			=> new quota in MB
+)
+
+Function $glesys_api->email_quota($emailaccount)
+Description: Gets quota information about an account. How much is being used and how much is available.
+Param string $emailaccount required.
+
+Function $glesys_api->email_createalias($emailalias, $goto)
+Description: Create an email alias.
+Param string $emailaccount required.
+Param string $goto required.
+
+Function $glesys_api->email_editalias($emailalias, $goto)
+Description: Edit an email alias.
+Param string $emailaccount required.
+Param string $goto required.
+
+Function $glesys_api->email_costs()
+Description: Get email related costs and pricelists.
+Param: none

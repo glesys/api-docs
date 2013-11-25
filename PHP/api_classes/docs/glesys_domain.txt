@@ -1,0 +1,163 @@
+/**
+ * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
+ * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
+ */
+
+All functions return true on success and false on failure,
+On failure $glesys_api->fetch_response() returns
+array(
+	'code'	=> (int)	response code
+	'text'	=> (string)	response text
+	'debug'	=> array(
+		'input'	=> array(
+			The POST data sent to the API
+		)
+	)
+);
+
+On success you need to call $glesys_api->fetch_response() to get a array with the returned data.
+
+Function $glesys_api->domain_list()
+Description: Get a list of all domains on this account. The glesysnameserver-item in the returned data shows if this domain actually uses glesys nameservers or not. It looks in the domains NS-records for .namesystem.se
+Param: none
+
+Function $glesys_api->domain_add()
+Description: Add a domain to our dns-system. Some default records will be created on the domain. If the optional argument create_records is set to 0, only NS and SOA records will be created by default.
+param required string $domainname.
+param optional, array(
+	'primarynameserver'	=> (string) optional
+	'responsibleperson'	=> (string) optional
+	'ttl'				=> (int) optional
+	'refresh			=> (int) optional
+	'retry'				=> (int) optional
+	'expire'			=> (int) optional
+	'minimum'			=> (int) optional
+	'createrecords'		=> (int) optional
+)
+
+Function $glesys_api->domain_register()
+Description: Register a domain. The domain has to be added to the account first by calling domain/add. The optional argument numyears decides how many years the domain in registered for. It defaults to the lowest number of years allowed for the tld.
+The domain name will be punycoded if it has international characters in it.
+Param array(
+	'domainname'	=> (string) required
+	'email'			=> (string) required
+	'firstname'		=> (string) required
+	'lastname'		=> (string) required
+	'organization'	=> (string) required
+	'organizationnumber'	=> (string) required
+	'address'		=> (string) required
+	'city'			=> (string) required
+	'zipcode'		=> (string) required
+	'country'		=> (string) required
+	'phonenumber'	=> (string) required
+
+	'fax'			=> (string) optional
+	'numyears'		=> (string) optional
+)
+
+Function $glesys_api->domain_transfer()
+Description: Transfer a domain to glesys. The domain has to be added to the account first by calling domain/add. The optional argument numyears decides how many years the domain in registered for. It defaults to the lowest number of years allowed for the tld.
+The domain name will be punycoded if it has international characters in it.
+Param array(
+	'domainname'	=> (string) required
+	'authcode'		=> (string) required
+	'email'			=> (string) required
+	'firstname'		=> (string) required
+	'lastname'		=> (string) required
+	'organization'	=> (string) required
+	'organizationnumber'	=> (string) required
+	'address'		=> (string) required
+	'city'			=> (string) required
+	'zipcode'		=> (string) required
+	'country'		=> (string) required
+	'phonenumber'	=> (string) required
+
+	'fax'			=> (string) optional
+	'numyears'		=> (string) optional
+)
+
+Function $glesys_api->domain_renew()
+Description: Renew a domain. The domain has to be added to the account first by calling domain/add.
+The domain name will be punycoded if it has international characters in it.
+Param string domainname required
+Param int numyears required
+
+Function $glesys_api->domain_autorenew()
+Description: Activate/deactivate autorenewal for a domain.
+The domain name will be punycoded if it has international characters in it.
+Param string domainname required
+Param int autorenew required (0 or 1)
+
+Function $glesys_api->domain_details()
+Description: Gets detailed information about this domain. This is basically the information available in the domains SOA-record.
+The domain name will be punycoded if it has international characters in it.
+Param string domainname required
+
+Function $glesys_api->domain_available()
+Description: Checks if the domain is available for registration. You can either set search to the domain you are interested in or leave out the tld and search for all tlds that we offer for registration. Example: example.com or example.
+The domain name will be punycoded if it has international characters in it.
+Param string domainname required
+
+Function $glesys_api->domain_pricelist()
+Description: Gets a full domain pricelist with all available TLDs
+Param: none
+
+Function $glesys_api->domain_edit()
+Description: edit soa for a domain in our dns-system
+Param: required string domainname
+Param: optional array(
+	'primarynameserver'	=> (string) optional
+	'responsibleperson'	=> (string) optional
+	'ttl'				=> (int) optional
+	'refresh'			=> (int) optional
+	'retry'				=> (int) optional
+	'expire'			=> (int) optional
+	'minimum'			=> (int) optional
+)
+
+Function $glesys_api->domain_delete()
+Description: Delete a domain from the dns system.
+Param: required string domainname
+
+Function $glesys_api->domain_listrecords()
+Description: List records for a given domain. This information includes the recordid.
+Param: required string domainname
+
+Function $glesys_api->domain_updaterecord()
+Param: required int recordid (you can fetch this with $glesys_api->domain_listrecords())
+Param: optional array(
+	'host'	=> (string) optional
+	'type'	=> (string) optional
+	'data'	=> (string) optional
+	'ttl'	=> (int) optional
+)
+
+Function $glesys_api->domain_addrecord()
+Description: Adds a dns record to a domain
+Param array(
+	'domainname'	=> (string) required
+	'host'			=> (string) required
+	'type'			=> (string) required
+	'data'			=> (string) required
+
+	'ttl'			=> (int) optional
+)
+
+Function $glesys_api->domain_deleterecord()
+Description: Removes a dns record from a domain.
+Param: required int recordid (you can fetch this with $glesys_api->domain_listrecords())
+
+Function $glesys_api->domain_allowedarguments()
+Description: Lists the allowed arguments for some of the functions in this module such as register. Some tlds require that the registering part has connections to the country.
+Param: none
+
+Function $glesys_api->domain_changenameservers()
+Description: Change nameservers for a domain. Check the registrarinfo field in $glesys_api->domain_details() to know if this can be done for a domain.
+Param array(
+	'domainname'	=> (string) required
+	'ns1'			=> (string) required
+	'ns2'			=> (string) required
+
+	'ns3'			=> (string) optional
+	'ns4'			=> (string) optional
+)
