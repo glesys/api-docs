@@ -24,6 +24,7 @@ Remember that all these examples are just examples. If you want to use any of th
 [All PHP examples](https://github.com/GleSYS/API/tree/master/PHP)
 * [InvoiceRSS](https://github.com/GleSYS/API/tree/master/PHP/InvoiceRSS) - List invoices in a RSS-feed.
 * [MiniControlpanel](https://github.com/GleSYS/API/tree/master/PHP/MiniControlpanel) - A miniature control panel.
+* [api_classes](https://github.com/GleSYS/API/tree/master/PHP/api_classes) - PHP-classes for managing domains and email accounts.
 
 ###Ruby
 [All Ruby examples](https://github.com/GleSYS/API/tree/master/Ruby)
