@@ -20,7 +20,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param void
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_list()
 	{
@@ -45,7 +45,7 @@ class glesys_domain extends glesys_api
 	 *   'createrecords'		=> (int) 0|1, default = 1
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_add($domainname, $data = array())
 	{
@@ -85,7 +85,7 @@ class glesys_domain extends glesys_api
 	 *   'numyears'		=> (string) optional
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_register($domain_data)
 	{
@@ -115,7 +115,7 @@ class glesys_domain extends glesys_api
 	 *   'numyears'		=> (string) optional
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_transfer($domain_data)
 	{
@@ -131,7 +131,7 @@ class glesys_domain extends glesys_api
 	 * @param string $domainname required
 	 * @param int $numyears required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_renew($domainname, $numyears)
 	{
@@ -150,7 +150,7 @@ class glesys_domain extends glesys_api
 	 * @param string $domainname required
 	 * @param int $autorenew required (0 or 1)
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_autorenew($domainname, $autorenew)
 	{
@@ -168,7 +168,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param string $domainname required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_details($domainname)
 	{
@@ -185,7 +185,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param string $domainname required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_available($domainname)
 	{
@@ -202,7 +202,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param void
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_pricelist()
 	{
@@ -226,7 +226,7 @@ class glesys_domain extends glesys_api
 	 *   'minimum'				=> (int) seconds, default = 10800
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_edit($domainname, $data = array())
 	{
@@ -248,7 +248,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param string $domainname required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_delete($domainname)
 	{
@@ -266,7 +266,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param string $domainname required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_listrecords($domainname)
 	{
@@ -290,7 +290,7 @@ class glesys_domain extends glesys_api
 	 *   'data'	=> (string) optional
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_updaterecord($recordid, $data = array())
 	{
@@ -319,7 +319,7 @@ class glesys_domain extends glesys_api
 	 *   'ttl'			=> (int) optional
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_addrecord($data)
 	{
@@ -335,7 +335,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param int $recordid required
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_deleterecord($recordid)
 	{
@@ -353,7 +353,7 @@ class glesys_domain extends glesys_api
 	 *
 	 * @param void
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_allowedarguments()
 	{
@@ -374,7 +374,7 @@ class glesys_domain extends glesys_api
 	 *   'ns4'			=> (string) optional
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_domain->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function domain_changenameservers($data)
 	{
@@ -384,33 +384,3 @@ class glesys_domain extends glesys_api
 		return($success);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//

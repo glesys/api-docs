@@ -18,7 +18,7 @@ class glesys_email extends glesys_api
 	 *
 	 * @param void
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_overview()
 	{
@@ -26,12 +26,13 @@ class glesys_email extends glesys_api
 
 		if ($success)
 		{
-			// Shorten the arrya a bit.
-			$response = array();
-			$response['status']		= $this->response['status'];
-			$response['summary']	= $this->response['overview']['summary'];
-			$response['domains']	= $this->response['overview']['domains'];
-			$response['debug']		= $this->response['debug'];
+			// Shorten the array a bit.
+			$response = array(
+				'status'	=> $this->response['status'],
+				'summary'	=> $this->response['overview']['summary'],
+				'domains'	=> $this->response['overview']['domains'],
+				'debug'		=> $this->response['debug'],
+			);
 			$this->response = $response;
 		}
 
@@ -45,7 +46,7 @@ class glesys_email extends glesys_api
 	 *
 	 * @param int optional $quota. The new quota to set.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_globalquota($quota = '')
 	{
@@ -75,7 +76,7 @@ class glesys_email extends glesys_api
 	 * @param string $domainname required.
 	 * @param string $filter optional.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_list($domainname, $filter = '')
 	{
@@ -92,12 +93,13 @@ class glesys_email extends glesys_api
 
 		if ($success)
 		{
-			// Shorten the arrya a bit.
-			$response = array();
-			$response['status']			= $this->response['status'];
-			$response['emailaccounts']	= $this->response['list']['emailaccounts'];
-			$response['emailaliases']	= $this->response['list']['emailaliases'];
-			$response['debug']			= $this->response['debug'];
+			// Shorten the array a bit.
+			$response = array(
+				'status'		=> $this->response['status'],
+				'emailaccounts'	=> $this->response['list']['emailaccounts'],
+				'emailaliases'	=> $this->response['list']['emailaliases'],
+				'debug'			=> $this->response['debug'],
+			);
 			$this->response = $response;
 		}
 
@@ -119,7 +121,7 @@ class glesys_email extends glesys_api
 	 *   'quota'			=> new quota in MB
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_editaccount($emailaccount, $data = array())
 	{
@@ -141,7 +143,7 @@ class glesys_email extends glesys_api
 	 *
 	 * @param string $email required.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_delete($email)
 	{
@@ -168,7 +170,7 @@ class glesys_email extends glesys_api
 	 *   'quota'			=> new quota in MB
 	 * )
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_createaccount($emailaccount, $password, $data = array())
 	{
@@ -192,7 +194,7 @@ class glesys_email extends glesys_api
 	 *
 	 * @param string $emailaccount required.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_quota($emailaccount)
 	{
@@ -210,7 +212,7 @@ class glesys_email extends glesys_api
 	 * @param string $emailaccount required.
 	 * @param string $goto required.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_createalias($emailalias, $goto)
 	{
@@ -229,7 +231,7 @@ class glesys_email extends glesys_api
 	 * @param string $emailaccount required.
 	 * @param string $goto required.
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_editalias($emailalias, $goto)
 	{
@@ -247,7 +249,7 @@ class glesys_email extends glesys_api
 	 *
 	 * @param void
 	 * @return true on success or false on failure.
-	 * In both cases the response can be fetched using $glesys_email->fetch_response().
+	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
 	public function email_costs()
 	{
