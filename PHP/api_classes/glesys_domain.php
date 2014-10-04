@@ -1,5 +1,7 @@
 <?php
 /**
+ * @package GleSYS API
+ *
  * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
  * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
  */
@@ -52,6 +54,17 @@ class glesys_domain extends glesys_api
 		$args = array(
 			'domainname'	=> $this->punycode_endoce($domainname),
 		);
+
+		// Make sure 'primarynameserver' and 'responsibleperson' ends with a dot.
+		if (!empty($data['primarynameserver']) && substr($data['primarynameserver'], -1) != '.')
+		{
+			$data['primarynameserver'] .= '.';
+		}
+
+		if (!empty($data['responsibleperson']) && substr($data['responsibleperson'], -1) != '.')
+		{
+			$data['responsibleperson'] .= '.';
+		}
 
 		if (!empty($data))
 		{
@@ -216,7 +229,7 @@ class glesys_domain extends glesys_api
 	 * If the optional argument create_records is set to 0, only NS and SOA records will be created by default.
 	 *
 	 * @param required string $domainname.
-	 * @param optional array $args, all array parts are also optional array(
+	 * @param optional array $args, all array parts are optional array(
 	 *   'primarynameserver'	=> (string) default = 'ns1.namesystem.se.'
 	 *   'responsibleperson'	=> (string) default = 'registry.glesys.se.'
 	 *   'ttl'					=> (int) seconds, default = 3600
@@ -233,6 +246,17 @@ class glesys_domain extends glesys_api
 		$args = array(
 			'domainname'	=> $this->punycode_endoce($domainname),
 		);
+
+		// Make sure 'primarynameserver' and 'responsibleperson' ends with a dot.
+		if (!empty($data['primarynameserver']) && substr($data['primarynameserver'], -1) != '.')
+		{
+			$data['primarynameserver'] .= '.';
+		}
+
+		if (!empty($data['responsibleperson']) && substr($data['responsibleperson'], -1) != '.')
+		{
+			$data['responsibleperson'] .= '.';
+		}
 
 		if (!empty($data))
 		{
