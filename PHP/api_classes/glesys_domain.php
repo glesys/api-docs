@@ -66,6 +66,12 @@ class glesys_domain extends glesys_api
 			$data['responsibleperson'] .= '.';
 		}
 
+		// Make sure 'createrecords' is 0 or 1.
+		if (isset($data['createrecords']))
+		{
+			$this->gen_int($data['createrecords']);
+		}
+
 		if (!empty($data))
 		{
 			$args = array_merge($args, $data);
@@ -169,7 +175,7 @@ class glesys_domain extends glesys_api
 	{
 		$args = array(
 			'domainname'	=> $this->punycode_endoce($domainname),
-			'autorenew'		=> $autorenew,
+			'autorenew'		=> $this->gen_int($autorenew),
 		);
 
 		$success = $this->api_request('domain/autorenew', $args);
