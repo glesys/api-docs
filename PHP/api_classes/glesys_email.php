@@ -1,5 +1,7 @@
 <?php
 /**
+ * @package GleSYS API
+ *
  * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
  * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
  */
