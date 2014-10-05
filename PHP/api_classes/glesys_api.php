@@ -6,6 +6,16 @@
  * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
  */
 
+/**
+ * Some of theses works with the API but PHP gives a warning.
+ * So instead of relaying on PHP to catch and handle the errors we define them here.
+ * This file is included before anything happens.
+ */
+define('NO', 0);
+define('no', 0);
+
+define('YES', 1);
+define('yes', 1);
 
 class glesys_api
 {
@@ -128,4 +138,27 @@ class glesys_api
 
 		return($this->punycode->decode($string));
 	}
+
+	/**
+	 *	Convert boolean and string values to integer 0 or 1.
+	 *
+	 *	@param $value bool or string value to convert.
+	 *	@return int 0 or 1.
+	 */
+	protected function gen_int($value = false)
+	{
+		if ($value == true || $value == 'TRUE' || $value == 'true'|| $value == 'YES' || $value == 'yes')
+		{
+			return(1);
+		}
+
+		// If not catched above it's false.
+		return(0);
+	}
 }
+
+
+
+
+
+/**/
