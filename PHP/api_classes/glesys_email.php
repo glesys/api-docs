@@ -131,6 +131,21 @@ class glesys_email extends glesys_api
 			'emailaccount'	=> $emailaccount,
 		);
 
+		if (isset($data['antivirus']))
+		{
+			$data['antivirus'] = $this->gen_int($data['antivirus']);
+		}
+
+		if (isset($data['autorespond']))
+		{
+			$data['autorespond'] = $this->gen_int($data['autorespond']);
+		}
+
+		if (isset($data['autorespondsaveemail']))
+		{
+			$data['autorespondsaveemail'] = $this->gen_int($data['autorespondsaveemail']);
+		}
+
 		if (!empty($data))
 		{
 			$args = array_merge($args, $data);
@@ -180,6 +195,21 @@ class glesys_email extends glesys_api
 			'emailaccount'	=> $emailaccount,
 			'password'		=> $password,
 		);
+
+		if (isset($data['antivirus']))
+		{
+			$data['antivirus'] = $this->gen_int($data['antivirus']);
+		}
+
+		if (isset($data['autorespond']))
+		{
+			$data['autorespond'] = $this->gen_int($data['autorespond']);
+		}
+
+		if (isset($data['autorespondsaveemail']))
+		{
+			$data['autorespondsaveemail'] = $this->gen_int($data['autorespondsaveemail']);
+		}
 
 		if (!empty($data))
 		{
