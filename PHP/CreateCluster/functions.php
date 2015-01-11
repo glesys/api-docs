@@ -17,7 +17,7 @@ function get_reserved_ip()
 	}
 }
 
-function create_loadbalancer($ip,$datacenter)
+function create_loadbalancer($ip, $datacenter)
 {
 	$data = array('name'=>'Demo-LB','datacenter'=>$datacenter,'ipaddress'=>$ip);
 	$lb = _call('loadbalancer/create',$data);
@@ -25,18 +25,26 @@ function create_loadbalancer($ip,$datacenter)
 	return $lb->response->loadbalancer;
 }
 
-function create_server($datacenter,$hostname,$platform = 'OpenVZ',$template = 'Debian 7.0 64-bit',$disk = '10',$memory='1024',$cpu = '1',$rootpassword = 'Test123!')
+function create_server($datacenter, $hostname, $platform = 'OpenVZ', $template = 'Debian 7.0 64-bit', $disk = '10', $memory = '1024', $cpu = '1', $rootpassword = 'Test123!')
 {
 	$data = array(
-			'datacenter' => $datacenter, 'platform'=>$platform,'hostname' =>$hostname,'templatename'=>$template,'disksize'=>$disk,'memorysize'=>$memory,'cpucores'=>$cpu,'rootpassword'=>$rootpassword
+			'datacenter' => $datacenter,
+			'platform'=>$platform,
+		 	'hostname' =>$hostname,
+			'templatename'=>$template,
+			'disksize'=>$disk,
+			'memorysize'=>$memory,
+			'cpucores'=>$cpu,
+			'rootpassword'=>$rootpassword
 		);
+	
 	$server = _call('server/create',$data);
 
 	return $server;
 
 }
 
-function add_backend_frontend($name,$loadbalancerid,$mode,$stickysession,$port)
+function add_backend_frontend( $name, $loadbalancerid, $mode, $stickysession, $port)
 {
 
 	//Create backend
@@ -86,7 +94,7 @@ function add_targets($loadbalancerid, $backendname, $targets, $port)
 	return $target_data;
 }
 
-function _call($end_point,$payload)
+function _call($end_point, $payload)
 {
 
 	global $user;

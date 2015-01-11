@@ -16,7 +16,7 @@ if($ip)
 }
 
 //Create loadbalancer
-$lb = create_loadbalancer($ip->ipaddress,$ip->datacenter);
+$lb = create_loadbalancer($ip->ipaddress, $ip->datacenter);
 $loadbalancerid = $lb->loadbalancerid;
 
 if($loadbalancerid)
@@ -38,7 +38,7 @@ while( $i < $numservers ) {
 }
 
 //Add servers to loadbalancer
-$loadbalancer_data = add_backend_frontend($clustername,$loadbalancerid,$mode,$stickysession,$port);
+$loadbalancer_data = add_backend_frontend($clustername, $loadbalancerid, $mode, $stickysession, $port);
 
 echo "Created Loadbalancer frontend and backend\n";
 
