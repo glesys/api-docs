@@ -4,12 +4,14 @@ include('functions.php');
 
 //Start by getting reserved IPs
 $ip = get_reserved_ip();
-if(!$ip){
+if(!$ip)
+{
 	echo "No IPs available!, you need at least one IP reserved and unused.\n";
 	die();
 }
 
-if($ip){
+if($ip)
+{
 	echo "IP: ".$ip->ipaddress." will be used for the loadbalancer\n";
 }
 
@@ -17,7 +19,8 @@ if($ip){
 $lb = create_loadbalancer($ip->ipaddress,$ip->datacenter);
 $loadbalancerid = $lb->loadbalancerid;
 
-if($loadbalancerid){
+if($loadbalancerid)
+{
 	echo "A loadbalancer with id: ".$loadbalancerid." was created\n";
 }else{
 	echo "Loadbalancer could not be created\n";
@@ -25,7 +28,7 @@ if($loadbalancerid){
 
 //Create servers
 
-while( $i < $numservers ){
+while( $i < $numservers ) {
 		$servername = $clustername."-".$i;
 		$server = create_server($ip->datacenter,$servername);
 // Create IP Array here
