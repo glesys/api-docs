@@ -36,7 +36,7 @@ function create_server($datacenter, $hostname, $platform = 'OpenVZ', $template =
 			'memorysize'=>$memory,
 			'cpucores'=>$cpu,
 			'rootpassword'=>$rootpassword
-		);
+	);
 	
 	$server = _call('server/create',$data);
 
