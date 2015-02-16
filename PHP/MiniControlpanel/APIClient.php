@@ -4,10 +4,10 @@
 class APIClient
 {
     /*
-     * This should be 1 in production and can be 0 in development.
+		 * This should be true in production and can be false in development.
      * Makes sure that curl verifies the certificate.
      */
-    private $_verify_ssl_validity = 0;
+		private $_verify_ssl_validity = false;
 
     protected $_username;
     protected $_apikey;
@@ -46,7 +46,7 @@ class APIClient
         curl_setopt($ch, CURLOPT_USERPWD, $this->_username . ":" . $this->_apikey);
         curl_setopt($ch, CURLOPT_TIMEOUT, 20);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->_verify_ssl_validity);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->_verify_ssl_validity);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->_verify_ssl_validity ? 2 : 0);
         
         $url='';
         if($requesttype=='get'){
