@@ -50,44 +50,49 @@ class Glesys
   # Returns settings hash
   def settings
     @settings = {
-      :datacenter => "Falkenberg",
-      :platform   => "Xen",
-      #:hostname   => "example.com",
-      :template   => "Debian-6 x64",
-      :disksize   => "10",
-      :memorysize => "512",
-      :cpucores   => "1",
-      :rootpw     => "p4ssw0rd",
-      :transfer   => "500"
+      :datacenter 	=> "Falkenberg",
+      :platform   	=> "OpenVZ",
+      :hostname     => "example#{rand(999)}.com",
+      :templatename	=> "Debian 7.0 64-bit",
+      :disksize   	=> "10",
+      :memorysize 	=> "512",
+      :cpucores   	=> "1",
+      :rootpassword	=> "p4ssw0rd",
+      :transfer   	=> "500"
     }
   end
 
   # Create a server
-  #
-  # Returns hash with serverid and ip
-  def create(custom={:hostname => 'example.com'})
-    settings.merge!(custom)
+  def create(options = {:hostname => 'example.com'})
+    settings.merge!(options)
 
     resp_json = request("/server/create", settings)
     resp_hash = JSON.parse(resp_json)
-    
-    code      = resp_hash['response']['status']['code']
-    if code == "200"
-      serverid  = resp_hash['response']['server']['serverid']
-      ip        = resp_hash['response']['server']['iplist'].first['ip']
+    unless status_code(resp_hash) == 200
+      raise resp_hash['response']['status']['text']
     end
-    { :serverid => serverid, :ip => ip}
+    server_id = resp_hash['response']['server']['serverid']
+    ip_list   = resp_hash['response']['server']['iplist'].map{ |ip| ip["ipaddress"] }
+    return {
+      :server_id => server_id,
+      :ip_list => ip_list
+    }
   end
 
   # Destroy a server
   #
   # Returns serverid
-  def destroy(id, keep_ip=0)
-    resp_json = request("/server/destroy", 
-      {:serverid => id, :keepip   => keep_ip})
+  def destroy(id, keep_ip=false)
+    params = {
+      :serverid => id, 
+      :keepip   => keep_ip ? 1 : 0
+    }
+    resp_json = request("/server/destroy", params)
     resp_hash = JSON.parse(resp_json)
-    code = resp_hash['response']['status']['code']
-    resp_hash['response']['arguments']['serverid'] if code == "200"
+    unless status_code(resp_hash) == 200
+      raise resp_hash['response']['status']['text']
+    end
+    return true
   end
 
   # Get IP from serverid
@@ -96,39 +101,53 @@ class Glesys
   def get_ip(id)
     resp_json = request("/ip/listown", :serverid => id)
     resp_hash = JSON.parse(resp_json)
+    unless status_code(resp_hash) == 200
+      raise resp_hash['response']['status']['text']
+    end
     iplist = resp_hash['response']['iplist']
 
     unless iplist.first.nil?
-      iplist.first['ip'] 
+      iplist.first['ipaddress'] 
     else
-      "NOT ASSIGNED"
+      nil
     end
   end
 
   # Lists all own servers
   #
   # Returns server response
-  def list
+  def list_servers
     resp_json = request("/server/list")
     resp_hash = JSON.parse(resp_json)
+    unless status_code(resp_hash) == 200
+      raise resp_hash['response']['status']['text']
+    end
     resp_hash['response']['servers']
+  end
+
+  def status_code(resp)
+    resp['response']['status']['code'].to_i
   end
 
 end
 
+require "pp"
+
+## Define your credentials
 glesys_api_key = "my_super_secret_api_key"
-a = Glesys.new("clNNNNN", glesys_api_key)
+api = Glesys.new("clNNNNN", glesys_api_key)
 
-# Create
-#server = a.create(:hostname => "glesys.example.com") 
-#puts "  => #{server[:serverid]} (#{server[:ip]}) created"
+## Create a server with default settings
+server = api.create(:hostname => "glesys.example.com") 
+#pp server
 
-# Destroy
-#puts "  => #{a.destroy(server[:serverid])} destroyed."
-
-# List
-output = ""
-a.list.each do |s|
-  output << "#{s['serverid']}\t#{a.get_ip(s['serverid'])}\t#{s['hostname']}\n"
+## List all servers on your account
+api.list_servers.each do |server|
+  puts "#{server['serverid']}\t#{api.get_ip(server['serverid'])}\t#{server['hostname']}\n"
 end
-puts output
+
+## Destroy server
+if api.destroy(server[:server_id])
+  puts "#{server[:server_id]} has been destroyed."
+end
+
