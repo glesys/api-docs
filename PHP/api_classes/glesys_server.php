@@ -1,6 +1,8 @@
 <?php
 /**
- * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
+ * @package GleSYS API
+ *
+ * @copyright (c) 2015 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
  * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
  */
 
@@ -34,7 +36,7 @@ class glesys_server extends glesys_api
 	 * The default value for 'includestate' is false, for performance reasons.
 	 *
 	 * @param string $serverid required.
-	 * @param string $includestate optional.
+	 * @param bool $includestate optional.
 	 * @return true on success or false on failure.
 	 * In both cases the response can be fetched using $glesys_api->fetch_response().
 	 */
@@ -42,7 +44,7 @@ class glesys_server extends glesys_api
 	{
 		$args = array(
 			'serverid'		=> $serverid,
-			'includestate'	=> (empty($includestate)) ? 0 : 1,
+			'includestate'	=> $this->gen_int($includestate),
 		);
 
 		$success = $this->api_request('server/details', $args);
@@ -414,7 +416,7 @@ class glesys_server extends glesys_api
 	}
 
 	/**
-	 * No description yet (TODO)
+	 * List all isos available for mounting in a virtual machine.
 	 *
 	 * @param string $serverid required
 	 * @return true on success or false on failure.
@@ -431,7 +433,7 @@ class glesys_server extends glesys_api
 	}
 
 	/**
-	 * No description yet (TODO)
+	 * Mount one of the isos listed in server/listiso on a virtual machine. This currently only supports vmware-servers.
 	 *
 	 * @param string $serverid required
 	 * @param string $isofile optional
@@ -454,7 +456,9 @@ class glesys_server extends glesys_api
 	}
 
 	/**
-	 * No description yet (TODO)
+	 * Add a iso for future usage with server/mountiso.
+	 * Upload the iso to an GleSYS archive volume and provide the path to the iso together
+	 * with the username and password to the archive volume.
 	 *
 	 * @param $args = array(
 	 *   'archiveusername'	=> required
