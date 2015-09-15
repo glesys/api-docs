@@ -62,6 +62,15 @@ class glesys_api
 	{
 		$url = $this->api_url . $request . '/format/json';
 
+		foreach ($args as &$value)
+		{
+			if ($value[0] == '@')
+			{
+				$value	= '%40' . substr($value, 1);
+			}
+		}
+		unset($value);
+
 		$ch = curl_init();
 		curl_setopt_array($ch, array(
 			CURLOPT_POST			=> true,
