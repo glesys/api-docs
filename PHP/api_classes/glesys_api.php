@@ -140,14 +140,14 @@ class glesys_api
 	}
 
 	/**
-	 *	Convert boolean and string values to integer 0 or 1.
+	 * Convert boolean and string values to integer 0 or 1.
 	 *
-	 *	@param $value bool or string value to convert.
-	 *	@return int 0 or 1.
+	 * @param $value bool or string value to convert.
+	 * @return int 0 or 1.
 	 */
 	protected function gen_int($value = false)
 	{
-		if ($value == true || $value == 'TRUE' || $value == 'true'|| $value == 'YES' || $value == 'yes')
+		if (filter_var($value, FILTER_VALIDATE_BOOLEAN))
 		{
 			return(1);
 		}
