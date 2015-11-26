@@ -11,7 +11,7 @@ The examples are available right here on our [github repo](https://github.com/Gl
 
 Please feel free to contribute with more examples. You could either do a pull-request or send us an email to [support@glesys.se](mailto:support@glesys.se)
 
-Remember that all these examples are just examples. If you want to use any of these scripts in an production environment, its on your own responsibility. 
+Remember that all these examples are just examples. If you want to use any of these scripts in an production environment, its on your own responsibility.
 
 ##Current examples
 ###BASH
@@ -46,3 +46,6 @@ If you know about any other frameworks that support the GleSYS API, please let u
 #Where can I get support?
 You can either [open a new issue here on github](https://github.com/GleSYS/API/issues) or send us an email at [support@glesys.se](mailto:support@glesys.se)
 
+# License
+
+If not stated otherwise, the contents of this repository are distributed under the MIT license.
