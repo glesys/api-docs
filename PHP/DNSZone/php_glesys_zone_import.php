@@ -17,38 +17,44 @@
 
     $parser = new File_DNS();
 
-    $parser->load(null, $file);
+    $domain = $parser->getDomain($file);
 
+    if($domain == null) {
+        if(ISSET($argv[4])) {
+            $domain = $argv[4];
+            echo 'Log: Retrieving domain from argument list: '.$argv[4].PHP_EOL;
+        }
+        else {
+            echo "Log: Domain not found. Create manually? (y/n) ";
+            $handle = fopen ("php://stdin","r");
+            $line = fgets($handle);
+            if(trim($line) == 'y'){
+                echo "Write domain name: ";
+                $handle = fopen ("php://stdin","r");
+                $line = fgets($handle);
+                if(trim($line)){
+                    $domain = trim($line);
+                }
+                else {
+                    echo 'Log: No domain provided.'.PHP_EOL;
+                    echo 'Log: Exiting';
+                    exit();
+                }
+            }
+            else {
+                echo "Log: Exiting";
+                exit();
+            }
+        }
+    }
+
+    $parser->load($domain, $file);
+    
     $glesys = new glesys_api();
     $glesys->api_user = $api_user;
     $glesys->api_key = $api_key;
     $glesys->api_url = $api_url;
-    if($parser->_SOA["name"] == "." && ISSET($argv[4])) {
-        $parser->_SOA["name"] = $argv[4];
-        echo 'Log: Retrieving domain from argument list: '.$argv[4].PHP_EOL;
-    }
-    else if($parser->_SOA["name"] == ".") {
-        echo "Log: Domain not found. Create manually? (y/n) ";
-        $handle = fopen ("php://stdin","r");
-        $line = fgets($handle);
-        if(trim($line) == 'y'){
-            echo "Write domain name: ";
-            $handle = fopen ("php://stdin","r");
-            $line = fgets($handle);
-            if(trim($line)){
-                $parser->_SOA["name"] = trim($line);
-            }
-            else {
-                echo 'Log: No domain provided.'.PHP_EOL;
-                echo 'Log: Exiting';
-                exit();
-            }
-        }
-        else {
-            echo "Log: Exiting";
-            exit();
-        }
-    }
+    
 
     echo 'Log: Adding domain...'.PHP_EOL;
 
@@ -348,27 +354,32 @@
         function getRecordsCounter() {
             return $this->recordsCounter;
         }
-        // }}}
-        // {{{ load()
-
-        /**
-         * cleans the object, then loads the specified zonefile.
-         *
-         * @param string  $domain    domainname of this zone
-         * @param string  $zonefile  filename of zonefile to load.
-         *                           Can be anything that PEAR::File can read.
-         * @param int     $lock      type of lock to establish on the zonefile.
-         *                           Set to LOCK_SH for a shared lock (reader)
-         *                           Set to LOCK_EX for an exclusive lock (writer)
-         *                           Add LOCK_NB if you don't want locking to block
-         * @return bool  true on success, PEAR Error on failure.
-         * @access public
-         */
+        
+        function getDomain($zonefile) {
+            $domain = null;
+            $lines = file($zonefile);
+            foreach ($lines as $line_num => $line) {
+                if(strpos(trim($line), "\$ORIGIN") === 0) {
+                    $domain = trim(substr($line, 7));
+                    if(strpos($domain, ";")) {
+                        $domain = trim(substr($domain, 0, strpos($domain, ";"))); 
+                    }
+                }
+            }
+            return $domain;
+        }
+        
         function load($domain, $zonefile, $lock = false)
         {
             //First, clean off the object.
             $this->free();
+            if(!is_file($zonefile)) {
+                echo 'Err: Cannot find zone file "'.$zonefile.'".'.PHP_EOL;
+                echo 'Err: Exiting'.PHP_EOL;
+                exit();
+            }
             $zone = file_get_contents($zonefile);
+            
 //            if (PEAR::isError($zone)) {
 //                //File package doesn't have codes associated with errors,
 //                //so raise our own.
@@ -458,7 +469,7 @@
              *  @ is new.sub3.example.com.
              */
 
-            $originFQDN = $origin = $current = $this->_domain . '.';
+            $originFQDN = $origin = $current = $this->_domain;
             $ttl = 86400; //RFC1537 advices this value as a default TTL.
 
             $zone = explode("\n", $zone);
@@ -592,12 +603,10 @@
             if (!$record['name']) {
                 //No name specified, inherit current name.
                 $record['name'] = $current;
-            } elseif ($record['name'] == '@') {
+            } elseif ($record['name'] == '@' || $record['name'] == '*') {
                 $record['name'] = $origin;
             }
-            if (substr($record['name'], -1) != '.') {
-                $record['name'] .= '.' . $origin;
-            }
+            
             unset($items[0]);
             foreach ($items as $key => $item) {
                 
@@ -635,6 +644,7 @@
                     case 'CNAME':
                     case 'PTR':
                         $record['data'] = $item;
+                        
                         break 2;
 
                     case 'MX':
@@ -935,7 +945,7 @@
                     $value = trim($value, '.') . '.';
                 case 'name':
                 case 'origin':
-                    $valid = '/^[A-Za-z0-9\-\_\.]*\.$/';
+                    $valid = '/^[A-Za-z0-9\-\_\.]*$/';
                     if (preg_match($valid, $value)) {
                         $soa[$key] = $value;
                     } else {
