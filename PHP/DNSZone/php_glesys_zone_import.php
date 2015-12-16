@@ -65,7 +65,8 @@
         "refresh" => $parser->_SOA["refresh"],
         "retry" => $parser->_SOA["retry"],
         "expire" => $parser->_SOA["expire"],
-        "minimum" => $parser->_SOA["minimum"]
+        "minimum" => $parser->_SOA["minimum"],
+        "createrecords" => 0
     ));
     
     if(!$domainAdded) {
