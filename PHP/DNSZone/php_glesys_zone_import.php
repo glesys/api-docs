@@ -604,8 +604,6 @@
             if (!$record['name']) {
                 //No name specified, inherit current name.
                 $record['name'] = $current;
-            } elseif ($record['name'] == '@' || $record['name'] == '*') {
-                $record['name'] = $origin;
             }
             
             unset($items[0]);
