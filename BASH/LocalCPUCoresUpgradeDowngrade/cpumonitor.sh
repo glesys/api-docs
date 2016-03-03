@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CORES=$(grep 'model name' /proc/cpuinfo | wc -l)
-LOAD=$(uptime | grep "load average" | awk '{print $12}' | sed 's/\..*//g')
+LOAD=$(uptime | grep "load average" | awk '{print $12}' | sed 's/[\.,].*//g')
 if [ $LOAD -ge $CORES ]; then
         NEWCORES=$((CORES+1));
 		/usr/bin/curl -X POST -d serverid=vz1234567\&cpucores=$NEWCORES -k --basic -u cl12345:[api-key] https://api.glesys.com/server/edit/
