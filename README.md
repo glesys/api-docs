@@ -38,6 +38,7 @@ Remember that all these examples are just examples. If you want to use any of th
 If you are looking for a framework to manage your GleSYS virtual servers take a look at the following projects:
 
 * [glesys-go](https://github.com/glesys/glesys-go) - An official client library written in go.
+* [docker-machine-driver-glesys](https://github.com/glesys/docker-machine-driver-glesys) - An official glesys api driver for docker machine
 * [fog](http://fog.io) - The Ruby cloud services library.
 * [jclouds](http://www.jclouds.org/) - API abstractions as java and clojure libraries.
 * [knife-glesys](https://github.com/smgt/knife-glesys) - A Knife addon for managing you GleSYS vps. Uses fog.
