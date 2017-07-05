@@ -1,7 +1,9 @@
 ***The GleSYS API is currently in BETA-state***
 
 # What is this?
-The is the place to go for [documentation](https://github.com/GleSYS/API/wiki), [examples](https://github.com/GleSYS/API/) and [support/feedback](https://github.com/GleSYS/API/issues) for [GleSYS](http://www.glesys.se) API. To activate the API on your account and to create API-keys, login at [GleSYS Control Panel](https://customer.glesys.com). In the early stages of our beta you have to send an email to [support@glesys.se](mailto:support@glesys.se) so that we can activate the API on you account for you.
+This is the place to go for [documentation](https://github.com/GleSYS/API/wiki), [examples](https://github.com/GleSYS/API/) and [support/feedback](https://github.com/GleSYS/API/issues) for [GleSYS](http://www.glesys.se) API. 
+
+You should start out by reading the [introduction](https://github.com/GleSYS/API/wiki/Api-Introduction).
 
 # Where can I find documentation?
 The [documentation](https://github.com/GleSYS/API/wiki) can be found right here on github in our [wiki](https://github.com/GleSYS/API/wiki). It comes in the form of an [introduction](https://github.com/GleSYS/API/wiki/Api-Introduction) and a full [documentation of all functions available in GleSYS API](https://github.com/GleSYS/API/wiki/Full-API-Documentation). This documentation has been automatically generated from the API.
