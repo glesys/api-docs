@@ -44,6 +44,7 @@ If you are looking for a framework to manage your GleSYS virtual servers take a 
 * [fog](http://fog.io) - The Ruby cloud services library.
 * [jclouds](http://www.jclouds.org/) - API abstractions as java and clojure libraries.
 * [knife-glesys](https://github.com/smgt/knife-glesys) - A Knife addon for managing you GleSYS vps. Uses fog.
+* [glesys-bash-client](https://github.com/MrDaar/glesys-bash-client) - A bash client for interacting with the GleSYS API.
 
 If you know about any other frameworks that support the GleSYS API, please let us know!
 
