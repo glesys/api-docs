@@ -1,7 +1,7 @@
 ***The GleSYS API is currently in BETA-state***
 
 # What is this?
-This is the place to go for [documentation](https://github.com/GleSYS/API/wiki), [examples](https://github.com/GleSYS/API/) and [support/feedback](https://github.com/GleSYS/API/issues) for [GleSYS](http://www.glesys.se) API. 
+This is the place to go for [documentation](https://github.com/GleSYS/API/wiki), [examples](https://github.com/GleSYS/API/) and [support/feedback](https://github.com/GleSYS/API/issues) for [GleSYS](http://www.glesys.se) API.
 
 You should start out by reading the [introduction](https://github.com/GleSYS/API/wiki/Api-Introduction).
 
@@ -44,6 +44,7 @@ If you are looking for a framework to manage your GleSYS virtual servers take a 
 * [fog](http://fog.io) - The Ruby cloud services library.
 * [jclouds](http://www.jclouds.org/) - API abstractions as java and clojure libraries.
 * [knife-glesys](https://github.com/smgt/knife-glesys) - A Knife addon for managing you GleSYS vps. Uses fog.
+* [glesys-bash-client](https://github.com/MrDaar/glesys-bash-client) - A bash client for interacting with the GleSYS API.
 
 If you know about any other frameworks that support the GleSYS API, please let us know!
 
