@@ -1,0 +1,158 @@
+/**
+ * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
+ * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
+ */
+
+All functions return true on success and false on failure,
+On failure $glesys_api->fetch_response() returns
+array(
+	'code'	=> (int)	response code
+	'text'	=> (string)	response text
+	'debug'	=> array(
+		'input'	=> array(
+			The POST data sent to the API
+		)
+	)
+)
+
+On success you need to call $glesys_api->fetch_response() to get a array with the returned data.
+
+Function $glesys_api->server_list()
+Description: Get a list of all servers on this account.
+Param: none
+
+Function $glesys_api->server_details()
+Description: Get detailed information about a server such as hostname, hardware configuration (cpu, memory and disk), ip adresses, cost, transfer, os and more. 'state' in the output will be set to null if the input parameter 'includestate' is set to false. If it is set to true it will return 'running', 'stopped' or 'locked'. The default value for 'includestate' is false, for performance reasons.
+Param: required serverid
+Param: optional includestate
+
+Function $glesys_api->server_status()
+Description: Get status information about a server. This information may contain on/off-status, cpu/memory/hdd-usage, bandwidth consumption and uptime. Not all information is supported by all platforms.
+Param: required serverid
+Param: optional statustype array(
+	'state'		=> 0|1 optional
+	'cpu'		=> 0|1 optional
+	'memory'	=> 0|1 optional
+	'disk'		=> 0|1 optional
+	'bandwidth'	=> 0|1 optional
+	'uptime'	=> 0|1 optional
+)
+
+Function $glesys_api->server_reboot()
+Description: Reboots a server. Does the same thing as server/stop with type set to reboot.
+Param: required serverid
+Param: optional transactionstarttime. A date/time value accepted by PHPs strtotime(). http://php.net/manual/en/function.strtotime.php
+
+
+Function $glesys_api->server_stop()
+Description: Shutdown, power off or reboot a server. Not all shutdown types are supported on all platforms. Only Xen supports a hard power off.
+Type can be 'soft', 'hard', or 'reboot' Default is 'soft'
+Param: required serverid
+Param: optional type
+Param: optional transactionstarttime. A date/time value accepted by PHPs strtotime(). http://php.net/manual/en/function.strtotime.php
+
+Function $glesys_api->server_start()
+Description: Power up (boot) a server.
+Param: required serverid
+Param: optional bios
+
+Function $glesys_api->server_create()
+Description: Create a new virtual server. An Xen server needs an ip-address when created. If you use the word 'any' as an argument, instead of an ip address, one will be choosen for you, automatically. If you dont supply the ip argument, one will be choosen for you.
+Param: array(
+	'datacenter'	=> string required [Amsterdam|Falkenberg|New York City|Stockholm]
+	'platform'		=> string required [OpenVZ|VMware|Xen]
+	'hostname'		=> string required
+	'templatename'	=> string required [Centos 5|Centos 5 64-bit|Centos 6 32-bit|Centos 6 64-bit|Centos 7 64-bit|Debian 6.0 32-bit|Debian 6.0 64-bit|Debian 7.0 32-bit|Debian 7.0 64-bit|Ubuntu 12.04 LTS 32-bit|Ubuntu 12.04 LTS 64-bit|Ubuntu 14.04 LTS 64-bit]
+	'disksize'		=> int GB required
+	'memorysize'	=> int MB required 
+	'cpucores'		=> int required
+	'rootpassword'	=> string required
+	'description'	=> string optional
+	'ip'			=> string optional
+	'ipv6'			=> string optional
+	'bandwidth'		=> int Mbit/s optional [10|100|200|300|400|500]
+	'campaigncode'	=> string optional
+)
+
+Function $glesys_api->server_destroy()
+Description: Destroy a server and remove all files on it. This change is final and cannot be undone. You will NOT be asked for confirmation.
+Param: required serverid
+Param: required keepip (yes|no)
+
+Function $glesys_api->server_edit()
+Description: Edit the configuration of a server. You can change such parameters as amount of cpu cores, memory, hdd and transfer. Most arguments are optional so you can change all, none or just a few of the parameters at a time.
+Param: required serverid
+Param: array(
+	'disksize'		=> optional
+	'memorysize'	=> optional
+	'cpucores'		=> optional
+	'transfer'		=> optional
+	'hostname'		=> optional
+	'description'	=> optional
+)
+
+Function $glesys_api->server_clone()
+Description: Create an copy (clone) of another server. This copies all files on the server. It will not boot the clone when the cloning is done. This has to be done manually. The ip-adresses are not moved from the original servers. The clone will not have any ip-address so if one is needed it should be added by the ip/add-function. Cloning is only supported on the OpenVZ-platform.
+param: required serverid
+Param: required hostname
+Param: array(
+	'disksize'		=> optional
+	'memorysize'	=> optional
+	'cpucores'		=> optional
+	'transfer'		=> optional
+	'description'	=> optional
+	'datacenter'	=> optional
+)
+
+Function $glesys_api->server_limits()
+Description: Only for OpenVZ. Get the beancounter limits for a server. The limits lets you know if you have exceeded any of the limits that are set for your server. These are limitations such as allocated memory, open files and more. More information about the parameters returned by this function can be found at http://wiki.openvz.org/UBC . You can reset the failcount of a limit using the function server/resetlimit.
+Param: required serverid
+
+Function $glesys_api->server_resetlimit()
+Description: Only for OpenVZ. Resets the failcount for a beancounters limit to zero. See the documentation for server/limits for more information.
+Param: required serverid
+Param: required type
+
+Function $glesys_api->server_console()
+Description: Get all the connection information you need to be able to connect to an server with VNC. This gives you console access and could be useful if you have locked yourself out using a firewall, or in a number of other situations.
+Param: required serverid
+
+Function $glesys_api->server_resetpassword()
+Description: Reset the root-password of a OpenVZ-server to a password of your choice.
+Param: required serverid
+Param: required rootpassword
+
+Function $glesys_api->server_templates()
+Description: Get a list of all operating system templates that are available when creating a server using the server/create-function.
+Param: none
+
+Function $glesys_api->server_allowedarguments()
+Description: Lists the allowed arguments for some of the functions in this module such as disksize, cpucores etc.
+Param: optional serverid
+
+Function $glesys_api->server_resourceusage()
+Description: Return resource usage over time for server.
+Param: array(
+	'serverid'		=> required
+	'resource'		=> required
+	'resolution'	=> required
+)
+
+Function $glesys_api->server_costs()
+Description: List all costs for this server such as cpu-, memory-, license- and managed hosting-costs and more.
+Param: required serverid
+
+Function $glesys_api->server_listiso()
+Description: List all isos available for mounting in a virtual machine.
+Param: required serverid
+
+Function $glesys_api->server_mountiso()
+Description: Mount one of the isos listed in server/listiso on a virtual machine. This currently only supports vmware-servers.
+Param: required serverid
+Param: optional isofile
+
+Function $glesys_api->server_addiso()
+Description: No description yet (TODO)
+Param: required archiveusername
+Param: required archivepassword
+Param: required archivepath

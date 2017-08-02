@@ -1,9 +1,21 @@
 <?php
 /**
+ * @package GleSYS API
+ *
  * @copyright (c) 2013 Jari (tumba25) Kanerva <jari@tumba25.net> http://www.tumba25.com
  * @license http://opensource.org/licenses/GPL-3.0 GNU General Public License v3
  */
 
+/**
+ * Some of theses works with the API but PHP gives a warning.
+ * So instead of relaying on PHP to catch and handle the errors we define them here.
+ * This file is included before anything happens.
+ */
+define('NO', 0);
+define('no', 0);
+
+define('YES', 1);
+define('yes', 1);
 
 class glesys_api
 {
@@ -50,6 +62,15 @@ class glesys_api
 	{
 		$url = $this->api_url . $request . '/format/json';
 
+		foreach ($args as &$value)
+		{
+			if ($value[0] == '@')
+			{
+				$value	= '%40' . substr($value, 1);
+			}
+		}
+		unset($value);
+
 		$ch = curl_init();
 		curl_setopt_array($ch, array(
 			CURLOPT_POST			=> true,
@@ -62,7 +83,6 @@ class glesys_api
 			CURLOPT_USERPWD			=> $this->api_user . ':' . $this->api_key,
 
 			CURLOPT_CUSTOMREQUEST	=> 'POST',
-			CURLOPT_SSH_AUTH_TYPES	=> CURLSSH_AUTH_ANY,
 		));
 
 		$response = curl_exec($ch);
@@ -127,4 +147,27 @@ class glesys_api
 
 		return($this->punycode->decode($string));
 	}
+
+	/**
+	 * Convert boolean and string values to integer 0 or 1.
+	 *
+	 * @param $value bool or string value to convert.
+	 * @return int 0 or 1.
+	 */
+	protected function gen_int($value = false)
+	{
+		if (filter_var($value, FILTER_VALIDATE_BOOLEAN))
+		{
+			return(1);
+		}
+
+		// If not catched above it's false.
+		return(0);
+	}
 }
+
+
+
+
+
+/**/
