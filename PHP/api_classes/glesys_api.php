@@ -53,7 +53,7 @@ class glesys_api
 		$ch = curl_init();
 		curl_setopt_array($ch, array(
 			CURLOPT_POST			=> true,
-			CURLOPT_POSTFIELDS		=> $args,
+			CURLOPT_POSTFIELDS		=> http_build_query($args),
 			CURLOPT_RETURNTRANSFER	=> true,
 			CURLOPT_SSL_VERIFYPEER	=> false,
 			CURLOPT_SSL_VERIFYHOST	=> 0,
