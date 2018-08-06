@@ -46,6 +46,7 @@ If you are looking for a framework to manage your GleSYS virtual servers take a 
 * [knife-glesys](https://github.com/smgt/knife-glesys) - A Knife addon for managing you GleSYS vps. Uses fog.
 * [glesys-bash-client](https://github.com/MrDaar/glesys-bash-client) - A bash client for interacting with the GleSYS API.
 * [glesys-dnshook](https://github.com/blastur/glesys-dnshook) - A hook for the Let's Encrypt ACME client dehydrated that allows you to use GleSYS DNS records to respond to dns-01 challenges.
+* [lexicon](https://github.com/AnalogJ/lexicon) - Manipulate DNS records on various DNS providers (including GleSYS) in a standardized/agnostic way.
 
 If you know about any other frameworks that support the GleSYS API, please let us know!
 
