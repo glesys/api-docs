@@ -1,5 +1,3 @@
-***The GleSYS API is currently in BETA-state***
-
 # What is this?
 This is the place to go for [documentation](https://github.com/GleSYS/API/wiki), [examples](https://github.com/GleSYS/API/) and [support/feedback](https://github.com/GleSYS/API/issues) for [GleSYS](http://www.glesys.se) API.
 
