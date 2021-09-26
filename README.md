@@ -45,6 +45,7 @@ If you are looking for a framework to manage your GleSYS virtual servers take a 
 * [glesys-bash-client](https://github.com/MrDaar/glesys-bash-client) - A bash client for interacting with the GleSYS API.
 * [glesys-dnshook](https://github.com/blastur/glesys-dnshook) - A hook for the Let's Encrypt ACME client dehydrated that allows you to use GleSYS DNS records to respond to dns-01 challenges.
 * [lexicon](https://github.com/AnalogJ/lexicon) - Manipulate DNS records on various DNS providers (including GleSYS) in a standardized/agnostic way.
+* [multipass](https://github.com/joelek/multipass) - Fully-automated certificate manager for NodeJS 16 with support for various DNS providers (including GleSYS).
 
 If you know about any other frameworks that support the GleSYS API, please let us know!
 
