@@ -2,11 +2,10 @@
 #
 #   An improved hook script for dehydrated and GleSYS API.
 #
-#   Original version by kiranos:
-#   https://github.com/kiranos/API/tree/master/BASH/LetsencryptGlesysHook
-#
-#   This fork is maintained by marcusmansson:
-#   https://gitlab.com/marcusmansson/glesys-dns01
+#   Contributions by
+#   * kiranos: https://github.com/kiranos/
+#   * marcusmansson: https://gitlab.com/marcusmansson/glesys-dns01
+#   * abed19919: https://github.com/abdulaziz-alahmad/
 #
 #   Dependencies
 #   ============
