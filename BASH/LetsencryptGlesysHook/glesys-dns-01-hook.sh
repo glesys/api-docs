@@ -20,9 +20,9 @@
 #   =============
 #   Read README.md
 #
-#   echo "export USER=CL12345" > /etc/ssl/private/glesys-credentials
-#   echo "export KEY=KEY_GOES_HERE" >> /etc/ssl/private/glesys-credentials
-#   chmod 600 /etc/ssl/private/glesys-credentials
+#   echo "export USER=CL12345" > /etc/ssl/private/.glesys-credentials
+#   echo "export KEY=KEY_GOES_HERE" >> /etc/ssl/private/.glesys-credentials
+#   chmod 600 /etc/ssl/private/.glesys-credentials
 #
 #   IMPORTANT
 #   =========
