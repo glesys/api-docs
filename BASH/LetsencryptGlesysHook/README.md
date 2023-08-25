@@ -16,10 +16,10 @@ How to set up letsencrypt via DNS (glesys-dns01) Works for wildcard
 - echo "export LOADBALANSERID=lb1234567" >> /etc/ssl/private/.glesys-credentials (in case you use load-balancer)
 - chmod 600 /etc/ssl/private/.glesys-credentials
 - cd /etc/dehydrated
-- wget https://raw.githubusercontent.com/abed19919/letsencrypt_glesys-dns01/master/glesys-dns-01-hook.sh
-- wget https://raw.githubusercontent.com/abed19919/letsencrypt_glesys-dns01/master/glesys-dns-01-lbl-hook.sh
+- wget https://raw.githubusercontent.com/glesys/api-docs/master/BASH/LetsencryptGlesysHook/glesys-dns-01-hook.sh
+- wget https://raw.githubusercontent.com/glesys/api-docs/master/BASH/LetsencryptGlesysHook/glesys-dns-01-lbl-hook.sh
 - wget https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated
-- wget -q https://raw.githubusercontent.com/abed19919/letsencrypt_glesys-dns01/master/config -O /etc/dehydrated/config
+- wget -q https://raw.githubusercontent.com/glesys/api-docs/master/BASH/LetsencryptGlesysHook/config -O /etc/dehydrated/config
 - chmod 700 /etc/dehydrated/glesys-dns-01-hook.sh /etc/dehydrated/glesys-dns-01-lbl-hook.sh /etc/dehydrated/dehydrated
 - edit your /etc/dehydrated/config to include the hook you want to use
   * glesys-dns-01-hook.sh # if you don't have a load-balancer # Active by default
