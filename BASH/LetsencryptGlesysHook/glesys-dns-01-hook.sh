@@ -113,11 +113,12 @@ deploy_challenge () {
     for domain in "${domains[@]}"; do
         read DOMAIN FQDN CHALLENGE <<< "$domain"
         glesys_api addrecord domainname=$DOMAIN \
-            host=_acme-challenge.$FQDN. type=TXT ttl=300 data=$CHALLENGE
+            host=_acme-challenge.$FQDN. type=TXT ttl=600 data=$CHALLENGE
     done
 
     # Wait for settings to apply on the endpoint.
-    sleep 2
+    echo "Wait for settings to apply on the endpoint. 20sec"
+    sleep 20
 }
 
 clean_challenge () {
@@ -172,7 +173,14 @@ sync_cert() {
 }
 
 deploy_cert () {
-    ######## GleSYS Specific ############################################
+    local DOMAIN="${2}" KEYFILE="${3}" CERTFILE="${4}" FULLCHAINFILE="${5}" CHAINFILE="${6}" TIMESTAMP="${4}"
+    echo "DOMAIN: $DOMAIN"
+    echo "CERTFILE: $CERTFILE"
+    echo "KEYFILE: $KEYFILE"
+    echo "CHAINFILE: $CHAINFILE"
+    echo "FULLCHAINFILE: $FULLCHAINFILE"
+
+    # Add you script here to be run after the certificate is created/renewed 
     echo "You should restart or reload the service that handel the SSL certs"
     #
     # Uncomment what matches servers setup.
