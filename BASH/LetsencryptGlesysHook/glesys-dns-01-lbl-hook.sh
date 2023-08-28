@@ -16,8 +16,9 @@
 #   =============
 #   Read README.md
 #
-#   echo "export USER=CL12345" > /etc/ssl/private/glesys-credentials
-#   echo "export KEY=KEY_GOES_HERE" >> /etc/ssl/private/glesys-credentials
+#   echo "export USER=CL12345" > /etc/ssl/private/.glesys-credentials
+#   echo "export KEY=KEY_GOES_HERE" >> /etc/ssl/private/.glesys-credentials
+#   echo "export LOADBALANSERID=lb1234567" >> /etc/ssl/private/.glesys-credentials
 #   chmod 600 /etc/ssl/private/glesys-credentials
 #
 #   IMPORTANT
@@ -33,7 +34,7 @@ set -o pipefail
 umask 077
 HOOK=$1
 TIME=$(date)
-LOGFILE=/var/log/glesys-dns-01.log
+LOGFILE=/var/log/glesys-dns-lb-01.log
 VERBOSE=
 
 _cleanup () {
@@ -84,6 +85,26 @@ _validate_response () {
     fi
 }
 
+request_failure() {
+    local STATUSCODE="${1}" REASON="${2}" REQTYPE="${3}" HEADERS="${4}"
+    # This hook is called when an HTTP request fails (e.g., when the ACME
+    # server is busy, returns an error, etc). It will be called upon any
+    # response code that does not start with '2'. Useful to alert admins
+    # about problems with requests.
+    #
+    # Parameters:
+    # - STATUSCODE
+    #   The HTML status code that originated the error.
+    # - REASON
+    #   The specified reason for the error.
+    # - REQTYPE
+    #   The kind of request that was made (GET, POST...)
+    # - HEADERS
+    #   HTTP headers returned by the CA
+    # Simple example: Send mail to root
+    # printf "Subject: HTTP request failed failed!\n\nA http request failed with status ${STATUSCODE}!" | sendmail root
+}
+
 deploy_challenge () {
     _parse_domains $@
 
@@ -91,13 +112,12 @@ deploy_challenge () {
     for domain in "${domains[@]}"; do
         read DOMAIN FQDN CHALLENGE <<< "$domain"
         glesys_api addrecord domainname=$DOMAIN \
-            host=_acme-challenge.$FQDN. type=TXT ttl=300 data=$CHALLENGE
-	echo "$CHALLENGE"
+            host=_acme-challenge.$FQDN. type=TXT ttl=600 data=$CHALLENGE
     done
 
     # Wait for settings to apply on the endpoint.
-    sleep 2
-    DONE="yes"
+    echo "Wait for settings to apply on the endpoint. 20sec"
+    sleep 20
 }
 
 clean_challenge () {
@@ -123,12 +143,7 @@ clean_challenge () {
             glesys_api deleterecord recordid=$id
         done
     done
-    DONE="yes"
 }
-
-
-#  # Wait for hook script to clean the challenge and to deploy cert if used
-#  [[ -n "${HOOK}" ]] && "${HOOK}" "deploy_cert" "${domain}" "${certdir}/privkey.pem" "${certdir}/cert.pem" "${certdir}/fullchain.pem" "${certdir}/chain.pem" "${timestamp}"
 
 function validate_xml {
 #Check if API call got status 200 (OK)
@@ -161,13 +176,11 @@ deploy_cert () {
         #change cert on frontend
         curl -s -X POST --data-urlencode loadbalancerid="$LOADBALANSERID" --data-urlencode frontendname="$frontend" --data-urlencode sslcertificate="letsencrypt-$date" -k --basic -u $USER:$KEY https://api.glesys.com/loadbalancer/editfrontend/ > /tmp/api-log.xml
         validate_xml
-        DONE="yes"
 }
 
 unchanged_cert () {
 
     echo "Certificate for domain $2 is still valid - no action taken"
-    DONE="yes"
 
 }
 
@@ -175,6 +188,8 @@ unchanged_cert () {
 exit_hook () {
     # - You might want to restart your web server here or
     # - Truncate log file, since no errors occured
+    # Uncomment the next line if you want to remove the logfile at this point
+    # rm $LOGFILE
     :
 }
 
