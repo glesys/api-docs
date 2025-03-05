@@ -443,11 +443,10 @@
             //data that crosses a line boundary.
             $zone = preg_replace_callback(
                 '/(\([^()]*\))/',
-                create_function(
-                    '$matches',
-                    'return str_replace("\\n", "", $matches[0]);'
-                    )
-                , $zone);
+                function ($matches) {
+                    return str_replace("\n", "", $matches[0]);
+                },
+                $zone);
             $zone = str_replace('(', '', $zone);
             $zone = str_replace(')', '', $zone);
 
@@ -1341,6 +1340,12 @@
     }
 
     class glesys_api {
+        public string $api_user;
+        public string $api_key;
+        public string $api_url;
+        public ?idna_convert $punycode = null;
+        public ?array $response = null;
+
         function add_domain($domainname, $data = array()) {
             $args = array(
                 'domainname'	=> $this->punycode_endoce($domainname)
@@ -1450,6 +1455,9 @@
         protected $_allow_overlong = false;  // Overlong UTF-8 encodings are forbidden
         protected $_strict_mode = false;     // Behave strict or not
         protected $_idn_version = 2003;      // Can be either 2003 (old, default) or 2008
+
+        public int $slast;
+
         /**
          * the constructor
          *
@@ -1773,7 +1781,7 @@
             $delim_pos = strrpos($encoded, '-');
             if ($delim_pos > self::byteLength($this->_punycode_prefix)) {
                 for ($k = self::byteLength($this->_punycode_prefix); $k < $delim_pos; ++$k) {
-                    $decoded[] = ord($encoded{$k});
+                    $decoded[] = ord($encoded[$k]);
                 }
             }
             $deco_len = count($decoded);
@@ -1785,7 +1793,7 @@
             $char = $this->_initial_n;
             for ($enco_idx = ($delim_pos) ? ($delim_pos + 1) : 0; $enco_idx < $enco_len; ++$deco_len) {
                 for ($old_idx = $idx, $w = 1, $k = $this->_base; 1 ; $k += $this->_base) {
-                    $digit = $this->_decode_digit($encoded{$enco_idx++});
+                    $digit = $this->_decode_digit($encoded[$enco_idx++]);
                     $idx += $digit * $w;
                     $t = ($k <= $bias) ? $this->_tmin :
                             (($k >= $bias + $this->_tmax) ? $this->_tmax : ($k - $bias));
@@ -2163,7 +2171,7 @@
             $mode = 'next';
             $test = 'none';
             for ($k = 0; $k < $inp_len; ++$k) {
-                $v = ord($input{$k}); // Extract byte from input string
+                $v = ord($input[$k]); // Extract byte from input string
                 if ($v < 128) { // We found an ASCII char - put into stirng as is
                     $output[$out_len] = $v;
                     ++$out_len;
@@ -2289,7 +2297,7 @@
                     $out_len++;
                     $output[$out_len] = 0;
                 }
-                $output[$out_len] += ord($input{$i}) << (8 * (3 - ($i % 4) ) );
+                $output[$out_len] += ord($input[$i]) << (8 * (3 - ($i % 4) ) );
             }
             return $output;
         }
