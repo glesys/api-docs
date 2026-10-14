@@ -6,6 +6,9 @@ This project contains CLI tools for importing and exporting DNS zone files to/fr
 
 PHP 7.4 or later with the curl extension.
 
+Both scripts use `../api_classes/idna_convert.php` for international domain names,
+so they must be run from within this repository layout.
+
 ## Import - php_glesys_zone_import.php
 
 Import a BIND-format DNS zone file to Glesys DNS.
@@ -28,9 +31,6 @@ php php_glesys_zone_export.php <domain> <api user> <api key> [output file]
 
 If output file is not specified, the zone will be written to stdout. Log and error
 messages are written to stderr, so stdout can be redirected straight to a file.
-
-The script uses `../api_classes/idna_convert.php` for international domain names,
-so it must be run from within this repository layout.
 
 ### Examples
 
