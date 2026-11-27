@@ -5,26 +5,91 @@
     */
     require_once __DIR__.'/../api_classes/idna_convert.php';
 
+    // The bundled File_DNS parser reports errors through PEAR, which isn't loaded
+    class PEAR
+    {
+        public static function raiseError($message)
+        {
+            echo 'Err: '.$message.PHP_EOL;
+            exit(1);
+        }
+
+        public static function isError($value)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Cannot open file.
+     */
+    define('FILE_DNS_FILE_READALL_FAILED',  -1);
+
+    /**
+     * Cannot save to file.
+     */
+    define('FILE_DNS_FILE_WRITE_FAILED',    -2);
+
+    /**
+     * SOA Parse Failed.
+     */
+    define('FILE_DNS_PARSE_SOA_FAILED',     -3);
+
+    /**
+     * RR Parse failed.
+     */
+    define('FILE_DNS_PARSE_RR_FAILED',      -4);
+
+    /**
+     * Parsing 1X to seconds failed.
+     */
+    define('FILE_DNS_PARSE_TIME_FAILED',    -5);
+
+    /**
+     * Parsing seconds to 1X failed.
+     */
+    define('FILE_DNS_PARSEBACK_TIME_FAILED',-6);
+
+    /**
+     * Can't render, zone not loaded yet.
+     */
+    define('FILE_DNS_RENDER_NOT_LOADED',    -7);
+
+    /**
+     * Can't set domain. Invalid Domain name.
+     */
+    define('FILE_DNS_INVALID_DOMAIN',       -8);
+
+    /**
+     * Can't update/set SOA
+     */
+    define('FILE_DNS_UPDATE_SOA_FAILED',    -9);
+
     echo PHP_EOL;
-    if(count($argv) < 3) {
-        echo 'Err: 3 arguments required.'.PHP_EOL;
-        echo 'php php_glesys_zone_import.php <DNS zone file> <api user> <api key>'.PHP_EOL;
-        exit();
+    if(count($argv) < 2) {
+        echo 'Usage: php php_glesys_zone_import.php <DNS zone file> [domain name]'.PHP_EOL;
+        echo 'Reads credentials from GLESYS_API_USER and GLESYS_API_KEY.'.PHP_EOL;
+        exit(1);
     }
 
     $file = $argv[1];
-    $api_user	= $argv[2];
-	$api_key	= $argv[3];
+    $api_user	= getenv('GLESYS_API_USER');
+	$api_key	= getenv('GLESYS_API_KEY');
 	$api_url	= 'https://api.glesys.com/';
+
+    if(!$api_user || !$api_key) {
+        echo 'Err: Set the GLESYS_API_USER and GLESYS_API_KEY environment variables.'.PHP_EOL;
+        exit(1);
+    }
 
     $parser = new File_DNS();
 
     $domain = $parser->getDomain($file);
 
     if($domain == null) {
-        if(ISSET($argv[4])) {
-            $domain = $argv[4];
-            echo 'Log: Retrieving domain from argument list: '.$argv[4].PHP_EOL;
+        if(ISSET($argv[2])) {
+            $domain = $argv[2];
+            echo 'Log: Retrieving domain from argument list: '.$argv[2].PHP_EOL;
         }
         else {
             echo "Log: Domain not found. Create manually? (y/n) ";
@@ -111,9 +176,19 @@
             $ptrRecords++;
         }
         else {
+            // The API wants hosts relative to the domain, and @ for the domain itself
+            $zone_name = trim($parser->_SOA["name"], ".");
+            $host = $record["name"];
+            if($host === $zone_name || $host === $zone_name.'.') {
+                $host = '@';
+            }
+            elseif(substr($host, -strlen($zone_name) - 2) === '.'.$zone_name.'.') {
+                $host = substr($host, 0, -strlen($zone_name) - 2);
+            }
+
             $recordAdded = $glesys->add_record(array(
-                "domainname" => trim($parser->_SOA["name"], "."),
-                "host" => $record["name"],
+                "domainname" => $zone_name,
+                "host" => $host,
                 "ttl" => $record["ttl"],
                 "type" => $record["type"],
                 "data" => trim($record["data"], "\"' ")
@@ -166,50 +241,6 @@
     
     exit();
 
-    /**
-     * Cannot open file.
-     */
-    define('FILE_DNS_FILE_READALL_FAILED',  -1);
-
-    /**
-     * Cannot save to file.
-     */
-    define('FILE_DNS_FILE_WRITE_FAILED',    -2);
-
-    /**
-     * SOA Parse Failed.
-     */
-    define('FILE_DNS_PARSE_SOA_FAILED',     -3);
-
-    /**
-     * RR Parse failed.
-     */
-    define('FILE_DNS_PARSE_RR_FAILED',      -4);
-
-    /**
-     * Parsing 1X to seconds failed.
-     */
-    define('FILE_DNS_PARSE_TIME_FAILED',    -5);
-
-    /**
-     * Parsing seconds to 1X failed.
-     */
-    define('FILE_DNS_PARSEBACK_TIME_FAILED',-6);
-
-    /**
-     * Can't render, zone not loaded yet.
-     */
-    define('FILE_DNS_RENDER_NOT_LOADED',    -7);
-
-    /**
-     * Can't set domain. Invalid Domain name.
-     */
-    define('FILE_DNS_INVALID_DOMAIN',       -8);
-
-    /**
-     * Can't update/set SOA
-     */
-    define('FILE_DNS_UPDATE_SOA_FAILED',    -9);
 
     // }}}
     // {{{ File_DNS
@@ -261,6 +292,11 @@
          * @access private
          */
         var $_domain = null;
+
+        /**
+         * Default TTL from the $TTL directive.
+         */
+        var $_ttl = null;
 
         /**
          * contains the filename of the loaded zone
@@ -482,10 +518,11 @@
                 $record = array();
                 if (!$line) {
                     //Empty lines are stripped.
-                } elseif (preg_match('/^\$TTL([^0-9]*)([0-9]+)/i',
+                } elseif (preg_match('/^\$TTL\s+(\S+)/i',
                                      $line, $matches)) {
                     //RFC 2308 defins the $TTL keyword as default TTL from here.
-                    $ttl = intval($matches[2]);
+                    //It can have a unit, such as 1h or 1d.
+                    $ttl = $this->parseToSeconds($matches[1]);
                 } elseif (preg_match('/^\$ORIGIN (.*\.)/', $line, $matches)) {
                     //FQDN origin. Note the trailing dot(.)
                     $origin = $originFQDN = trim($matches[1]);
