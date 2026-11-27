@@ -11,20 +11,25 @@
         fwrite(STDERR, $message.PHP_EOL);
     }
 
-    if (count($argv) < 4) {
-        log_msg('Err: 3 arguments required.');
-        log_msg('Usage: php php_glesys_zone_export.php <domain> <api user> <api key> [output file]');
-        log_msg('Example: php php_glesys_zone_export.php example.com CL12345 your-api-key zone.txt');
+    if (count($argv) < 2) {
+        log_msg('Usage: php php_glesys_zone_export.php <domain> [output file]');
+        log_msg('Example: php php_glesys_zone_export.php example.com zone.txt');
         log_msg('');
+        log_msg('Reads credentials from GLESYS_API_USER and GLESYS_API_KEY.');
         log_msg('If output file is not specified, zone will be written to stdout.');
         exit(1);
     }
 
     $domain     = strtolower($argv[1]);
-    $api_user   = $argv[2];
-    $api_key    = $argv[3];
-    $output_file = isset($argv[4]) ? $argv[4] : null;
+    $api_user   = getenv('GLESYS_API_USER');
+    $api_key    = getenv('GLESYS_API_KEY');
+    $output_file = isset($argv[2]) ? $argv[2] : null;
     $api_url    = 'https://api.glesys.com/';
+
+    if (!$api_user || !$api_key) {
+        log_msg('Err: Set the GLESYS_API_USER and GLESYS_API_KEY environment variables.');
+        exit(1);
+    }
 
     $glesys = new glesys_api();
     $glesys->api_user = $api_user;
