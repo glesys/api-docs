@@ -1,5 +1,5 @@
 # What is this?
-This is the place to go for [documentation](https://github.com/glesys/api-docs/wiki), [examples](https://github.com/glesys/api-docs/) and [support/feedback](https://github.com/glesys/api-docs/issues) for [GleSYS](http://www.glesys.se) API.
+This is the place to go for [documentation](https://github.com/glesys/api-docs/wiki) and [support/feedback](https://github.com/glesys/api-docs/issues) for [GleSYS](http://www.glesys.se) API.
 
 You should start out by reading the [introduction](https://github.com/glesys/api-docs/wiki/Api-Introduction).
 
@@ -7,32 +7,9 @@ You should start out by reading the [introduction](https://github.com/glesys/api
 The [documentation](https://github.com/glesys/api-docs/wiki) can be found right here on github in our [wiki](https://github.com/glesys/api-docs/wiki). It comes in the form of an [introduction](https://github.com/glesys/api-docs/wiki/Api-Introduction) and a full [documentation of all functions available in GleSYS API](https://github.com/glesys/api-docs/wiki/API-Documentation). This documentation has been automatically generated from the API.
 
 # Where can I find examples?
-The examples are available right here on our [github repo](https://github.com/glesys/api-docs/). They are broken up by scripting/programming language and if you browse around in the repository you will find that each example has its own description.
-
-Please feel free to contribute with more examples. You could either do a pull-request or send us an email to [support@glesys.se](mailto:support@glesys.se)
+* [DNSZone](https://github.com/glesys/api-docs/tree/master/PHP/DNSZone) - Import and export DNS zone files (BIND format) to and from your GleSYS account.
 
 Remember that all these examples are just examples. If you want to use any of these scripts in an production environment, its on your own responsibility.
-
-## Current examples
-### BASH
-[All bash examples](https://github.com/glesys/api-docs/tree/master/BASH)
-* [LocalMemUpgrade](https://github.com/glesys/api-docs/tree/master/BASH/LocalMemUpgrade) - Upgrade memory on a local server based on memoryusage.
-* [RemoteMemUpgrade](https://github.com/glesys/api-docs/tree/master/BASH/RemoteMemUpgrade) - Upgrade memory on a remote server based on memoryusage.
-* [RoundRobinLoadBalancer](https://github.com/glesys/api-docs/tree/master/BASH/RoundRobinLoadBalancer) - Basic round robin load balancer with availability monitoring.
-
-### PHP
-[All PHP examples](https://github.com/glesys/api-docs/tree/master/PHP)
-* [InvoiceRSS](https://github.com/glesys/api-docs/tree/master/PHP/InvoiceRSS) - List invoices in a RSS-feed.
-* [MiniControlpanel](https://github.com/glesys/api-docs/tree/master/PHP/MiniControlpanel) - A miniature control panel.
-* [api_classes](https://github.com/glesys/api-docs/tree/master/PHP/api_classes) - PHP-classes for managing domains and email accounts.
-
-### Ruby
-[All Ruby examples](https://github.com/glesys/api-docs/tree/master/Ruby)
-* [CreateDestroyList](https://github.com/glesys/api-docs/tree/master/Ruby/CreateDestroyList) - Create, Destroy and List servers.
-
-## Python
-[All Python examples](https://github.com/glesys/api-docs/tree/master/Python)
-* [ConkyServerStatus](https://github.com/glesys/api-docs/tree/master/Python/ConkyServerStatus) - Commandline script to be used with [conky](http://conky.sourceforge.net/) to show a specific glesys servers status directly on your desktop
 
 # Are there any frameworks/toolboxes available?
 If you are looking for a framework to manage your GleSYS virtual servers take a look at the following projects:
